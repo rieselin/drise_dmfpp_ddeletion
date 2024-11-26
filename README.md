@@ -3,7 +3,15 @@
 ## Citation
 
 ```
-TBD
+@misc{andres2024blackboxexplainabilityobjectdetection,
+      title={On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications}, 
+      author={Alain Andres and Aitor Martinez-Seras and Ibai Laña and Javier Del Ser},
+      year={2024},
+      eprint={2411.00818},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.00818}, 
+}
 ```
 
 ## Dependencies
@@ -60,7 +68,7 @@ The code is designed to process explanations for multiple images at once. Each X
 - `--width`: Width of the images.
 - `--N`: Number of masks to generate.
 - `--p1`: Proportion of occlusion for each mask.
-- `--s`: Resolution of the mask.
+- `--resolution`: Resolution of the mask.
 
 Additional parameters, such as GPU batch size (`gpu_batch`) and devices to use, can also be specified.
 
@@ -75,7 +83,7 @@ python3 -m scripts.drise_yolov8_alldetections \
     --model_path /path/to/runs/train/model/weights/best.pt \
     --saliency_map_dir saliency_maps/ \
     --height 736 --width 1280 \
-    --N 5000 --p1 0.25 --s 16 --gpu_batch 50
+    --N 5000 --p1 0.25 --resolution 16 --gpu_batch 50
 ```
 
 ```bash
@@ -85,7 +93,7 @@ python3 -m scripts.drise_yolov8_alldetections  \
     --model_path use_case/models/best.pt \
     --saliency_map_dir saliency_maps/ \
     --height 736  --width 1280 \
-    --N 500 --p1 0.25 --s 16 --gpu_batch 50
+    --N 500 --p1 0.25 --resolution 16 --gpu_batch 50
 ```
 
 Then, extract metrics with:
