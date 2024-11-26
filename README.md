@@ -1,5 +1,16 @@
 # On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications
 
+This repository is the official implementation of On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications, where algorithms like D-RISE and D-MFPP specifically designed for Object Detection models can be found.
+<div align="center">
+  <div>
+    <img src="imgs_readme/target_object.png" alt="target object" height="250" />
+    <img src="imgs_readme/target_object_explanation.png" alt="target object explanation" height="250" />
+  </div>
+  <p> Figure 1: Target Object and its Explanation generated with D-RISE for (only) 500 masks.</p>
+</div>
+
+
+
 ## Citation
 
 ```
@@ -56,8 +67,9 @@ project
 To use the repository, you can follow these steps:
 
 1. **Execute a Script**: Run any of the scripts in the `scripts` folder (e.g., `drise_alldetections.py`, `lime_alldetections.py`, or `orise_alldetections.py`) to generate the corresponding heatmaps.
-2. **Visualize Results**: Open the generated results in the Jupyter notebooks found within the `jupyter_notebooks` subfolder in `scripts`.
-3. **Compute Quantitative Results**: Analyze the quantitative results of the selected heatmaps and export them into a `.csv` file for further evaluation.
+2. **Compute Quantitative Results**: Analyze the quantitative results of the selected heatmaps and export them into a `.csv` file for further evaluation.
+In addition, the generated heatmaps can be **visualized**. A Jupyter notebooks found within the `jupyter_notebooks` subfolder in `scripts` is provided as an example.
+
 
 The code is designed to process explanations for multiple images at once. Each XAI method requires the following arguments:
 
@@ -112,7 +124,11 @@ python3 -m scripts.multiple_metrics  \
 
 This code has been developed with support from the European Commission under the HORIZON-CL4-DIS program. Due to confidentiality agreements and the involvement of stakeholders, the data associated with this project cannot be shared. A single image and a fine-tuned nano model are uploaded as examples on how to use the repository.
 
+<p align="center">
+  <img src="imgs_readme/ultimate-logo.jpg" alt="Ultimate Logo" width="300" />
+  <img src="imgs_readme/vertical_EU_POS.jpg" alt="Vertical EU POS" width="206" />
+</p>
 
-### License Information
+## License Information
 
 This project is licensed under the Apache 2.0 License with additional terms for commercial use. The software is free for research and educational purposes. For any commercial use, please review the `LICENSE` file and contact the main author (https://aklein1995.github.io/) for further information.
