@@ -131,4 +131,8 @@ This code has been developed with support from the European Commission under the
 
 ## License Information
 
-This project is licensed under the Apache 2.0 License with additional terms for commercial use. The software is free for research and educational purposes. For any commercial use, please review the `LICENSE` file and contact the main author (https://aklein1995.github.io/) for further information.
+This project is licensed under the **Apache 2.0 License** with additional terms for commercial use.
+
+- The software is free to use for **research** and **educational purposes**.
+- For **commercial use**, please review the [`LICENSE`](./LICENSE) file and contact the main author, [Alain Andres Fernandez](https://aklein1995.github.io/), for further information.
+- **Attribution Requirement**: This statement, alongside the [`LICENSE`](./LICENSE), must be included in any derivative works or distributions.
