@@ -12,16 +12,16 @@ This repository is the official implementation of On the Black-box Explainabilit
 
 
 ## Citation
-
+This code is part of our research published in a Q1 journal, [Results in Engineering](https://www.sciencedirect.com/journal/results-in-engineering). If you find it useful, please cite our work
 ```
-@misc{andres2024blackboxexplainabilityobjectdetection,
-      title={On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications}, 
-      author={Alain Andres and Aitor Martinez-Seras and Ibai Laña and Javier Del Ser},
-      year={2024},
-      eprint={2411.00818},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2411.00818}, 
+@article{AlainAndresXAI2024103498,
+  title = {On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications},
+  author = {Alain Andres and Aitor Martinez-Seras and Ibai Laña and Javier {Del Ser}},
+  journal = {Results in Engineering},
+  pages = {103498},
+  year = {2024},
+  issn = {2590-1230},
+  doi = {https://doi.org/10.1016/j.rineng.2024.103498},
 }
 ```
 
