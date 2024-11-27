@@ -1,6 +1,6 @@
 # On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications
 
-This repository is the official implementation of [On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications](https://doi.org/10.1016/j.rineng.2024.103498), where algorithms like D-RISE and D-MFPP specifically designed for Object Detection models can be found.
+This repository is the official implementation of [On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications](https://www.sciencedirect.com/science/article/pii/S259012302401750X), where algorithms like D-RISE and D-MFPP specifically designed for Object Detection models can be found.
 <div align="center">
   <div>
     <img src="imgs_readme/target_object.png" alt="target object" height="250" />
@@ -18,10 +18,12 @@ This code is part of our research published in a Q1 journal, [Results in Enginee
   title = {On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications},
   author = {Alain Andres and Aitor Martinez-Seras and Ibai Laña and Javier {Del Ser}},
   journal = {Results in Engineering},
+  volume = {24},
   pages = {103498},
   year = {2024},
   issn = {2590-1230},
   doi = {https://doi.org/10.1016/j.rineng.2024.103498},
+  url = {https://www.sciencedirect.com/science/article/pii/S259012302401750X},
 }
 ```
 
