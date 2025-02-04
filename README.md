@@ -88,7 +88,7 @@ Additional parameters, such as GPU batch size (`gpu_batch`) and devices to use, 
 
 ### Example Command
 
-Here’s an example of how to run the D-RISE method for YOLOv8 with specified parameters:
+Here’s an example of how to run the D-RISE method for YOLOv8:
 
 ```bash
 python3 -m scripts.drise_yolov8_alldetections \
@@ -99,6 +99,7 @@ python3 -m scripts.drise_yolov8_alldetections \
     --height 736 --width 1280 \
     --N 5000 --p1 0.25 --resolution 16 --gpu_batch 50
 ```
+More specifically, by following the structure of this repository, you would have to run:
 
 ```bash
 python3 -m scripts.drise_yolov8_alldetections  \
