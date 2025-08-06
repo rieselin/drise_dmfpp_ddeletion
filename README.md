@@ -70,7 +70,7 @@ To use the repository, you can follow these steps:
 
 1. **Execute a Script**: Run any of the scripts in the `scripts` folder (e.g., `drise_alldetections.py`, `lime_alldetections.py`, or `orise_alldetections.py`) to generate the corresponding heatmaps.
 2. **Compute Quantitative Results**: Analyze the quantitative results of the selected heatmaps and export them into a `.csv` file for further evaluation.
-In addition, the generated heatmaps can be **visualized**. A Jupyter notebooks found within the `jupyter_notebooks` subfolder in `scripts` is provided as an example.
+In addition, the generated heatmaps can be **visualized**. A Jupyter notebook in `scripts/jupyter_notebooks` is provided as an example.
 
 
 The code is designed to process explanations for multiple images at once. Each XAI method requires the following arguments:
@@ -88,7 +88,7 @@ Additional parameters, such as GPU batch size (`gpu_batch`) and devices to use, 
 
 ### Example Command
 
-Here’s an example of how to run the D-RISE method for YOLOv8:
+Here’s an example of how to run the **D-RISE** method for YOLOv8:
 
 ```bash
 python3 -m scripts.drise_yolov8_alldetections \
@@ -99,8 +99,20 @@ python3 -m scripts.drise_yolov8_alldetections \
     --height 736 --width 1280 \
     --N 5000 --p1 0.25 --resolution 16 --gpu_batch 50
 ```
-More specifically, by following the structure of this repository, you would have to run:
 
+To run **D-MFFP**, set the `mask_type` argument equal to `'mfpp'` (by default, it is set to `'rise'`):
+```bash
+python3 -m scripts.drise_yolov8_alldetections \
+    --datadir /path/to/Dataset/images/test/ \
+    --labels_dir /path/to/Dataset/labels/test/ \
+    --model_path /path/to/runs/train/model/weights/best.pt \
+    --saliency_map_dir saliency_maps/ \
+    --height 736 --width 1280 \
+    --N 5000 --p1 0.25 --resolution 16 --gpu_batch 50 \
+    --mask_type mfpp
+```
+
+Following the repository structure, an example command would be:
 ```bash
 python3 -m scripts.drise_yolov8_alldetections  \
     --datadir use_case/ \
@@ -111,8 +123,7 @@ python3 -m scripts.drise_yolov8_alldetections  \
     --N 500 --p1 0.25 --resolution 16 --gpu_batch 50
 ```
 
-Then, extract metrics with:
-
+Once the saliency maps are generated, you can extract evaluation metrics with:
 ```bash
 python3 -m scripts.multiple_metrics  \
     --datadir use_case/ \
@@ -122,6 +133,11 @@ python3 -m scripts.multiple_metrics  \
     --height 736  --width 1280 \
     --csv_dir "results/metrics.csv" --num_classes 8
 ```
+
+> 💡 **Note on D-Deletion:**  
+> The D-Deletion metric is implemented in `metrics/deletion.py`. Compared to the standard Deletion score, it optionally accepts a `target_bbox` argument and only considers predictions on the modified images that have an IoU greater than 0 with respect to that target.  
+> By default, `target_bbox` is set to `None`, so if you want to compute the **D-Deletion** score, make sure to provide it explicitly when calling the evaluation function.
+
 
 ## ACKNOWLEDGEMENTS
 
