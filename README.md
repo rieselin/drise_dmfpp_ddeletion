@@ -46,22 +46,21 @@ pip install -r requirements.txt
 
 ```
 project
-├── metrics                           # Contains code necessary to apply the metrics
+├── metrics                           # Contains the metrics
 ├── results                           # Stores the .csv files with quantitative results per image and for each element
 ├── saliency_maps                     # Place where the attribution maps obtained by each method are saved
 ├── scripts                           # Contains main logic and notebooks
-│   ├── drise_alldetections.py        # Script for D-RISE detections
-│   ├── lime_alldetections.py         # Script for LIME detections
-│   ├── orise_alldetections.py        # Script for ORISE detections
-│   ├── multiple_metrics.py           # Computes quantitative metrics based on provided heatmaps
-│   └── jupyter_notebooks             # Folder for Jupyter notebooks (description empty)
+│   ├── drise_alldetections.py        # Script for D-RISE and D-MFPP
+│   ├── lime_alldetections.py         # Script for LIME 
+│   ├── orise_alldetections.py        # Script for ORISE 
+│   ├── multiple_metrics.py           # Quantitative metrics based on provided heatmaps
+│   └── jupyter_nb                    # Folder for Jupyter notebooks 
 ├── utils                             # Various utility functions
-├── xai                               # Logic for the XAI algorithms
-│   ├── base.py                       # Base file for XAI methods
-│   ├── drise.py                      # D-RISE implementation
-│   ├── orise.py                      # ORISE implementation
-│   └── rise.py                       # RISE implementation
-└── execute.sh                        # Bash scripts to launch simulations
+└── xai                               # Logic for the XAI algorithms
+    ├── base.py                       # Base file for XAI methods
+    ├── drise.py                      
+    ├── orise.py                      
+    └── rise.py                       
 ```
 
 ## Example of Use
