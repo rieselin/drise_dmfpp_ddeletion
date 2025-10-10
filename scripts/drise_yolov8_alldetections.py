@@ -13,6 +13,15 @@ import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
+
+import torch
+print(torch.__version__)
+
+print(torch.cuda.is_available())
+print(torch.cuda.device_count())
+for i in range(torch.cuda.device_count()):
+    print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
+
 #########################
 # Arguments
 #########################
@@ -159,7 +168,10 @@ for img_name in imgs_name:
                 # ensure target directory exist
                 os.makedirs(args.saliency_map_dir, exist_ok=True)
                 # set filename/path
-                model_type = args.model_path.split(os.sep)[-3]
+                # safely extract model type from model_path
+                model_dir = os.path.dirname(args.model_path)  # e.g., 'use_case/models'
+                model_type = os.path.basename(model_dir)      # e.g., 'models'
+
                 filename = f'img{img_name}_m_{model_type}_d_' + mask_filename + f'_class_{_target_class}_bb_{target_norm_bbox}.npy'
                 saliency_map_path = os.path.join(args.saliency_map_dir, filename)
                 # save it
