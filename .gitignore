@@ -162,6 +162,6 @@ cython_debug/
 #.idea/
 
 
-./output/*
-./masks/*
-./unsloth_compiled_cache/*
+output/*
+masks/*
+unsloth_compiled_cache/*
