@@ -41,5 +41,6 @@ class DRISEExplainer:
             saliency_map=saliency[target_class], 
             target_class_id= target_class,
             target_bbox=target_bbox,
+            show_plot = self.args.show_plots,
             save_to=f'output/{self.args.img_name}_saliency_targetbb_class{target_class}_{date_time}.png'
         )
