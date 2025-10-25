@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 import torch
 
-def plot_saliency_map(img_name, saliency_map_path):
+def plot_saliency_map(img_name, saliency_map_path, show_plot=False):
     """
     Plots the saliency map for a given image name.
 
@@ -19,10 +19,11 @@ def plot_saliency_map(img_name, saliency_map_path):
     plt.colorbar(fraction=0.046, pad=0.04)
     plt.title(f'Saliency Map for {img_name}')
     plt.axis('off')
-    plt.show()
+    if show_plot:
+        plt.show()
 
 
-def plot_image_with_bboxes(img_np, bboxes, title=None, save_to=None):
+def plot_image_with_bboxes(img_np, bboxes, title=None, save_to=None, show_plot=False):
     """
     Plots an image with bounding boxes.
 
@@ -54,9 +55,10 @@ def plot_image_with_bboxes(img_np, bboxes, title=None, save_to=None):
     if save_to is not None:
         plt.savefig(fname=save_to)
     # Display the plot
-    plt.show()
+    if show_plot:
+        plt.show()
 
-def plot_saliency_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0):
+def plot_saliency_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, show_plot=False):
     """
     Plots the saliency map overlaid on the original image.
 
@@ -90,9 +92,10 @@ def plot_saliency_on_image(height, width, saliency_map, img, img_name='img_name'
     # 2.Overlay the saliency map
     plt.imshow(saliency, cmap='jet', alpha=0.5)
     plt.colorbar(fraction=0.046, pad=0.04)
-    plt.show()
+    if show_plot:
+        plt.show()
 
-def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, target_bbox=None, figsize=None, display_title=True, save_to=None):
+def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, target_bbox=None, figsize=None, display_title=True, save_to=None,show_plot=False):
     """
     Plots the saliency map overlaid on the original image along with the target bounding box.
 
@@ -146,4 +149,5 @@ def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_na
     if save_to is not None:
         plt.savefig(fname=save_to)
     plt.tight_layout()
-    plt.show()
+    if show_plot:
+        plt.show()
