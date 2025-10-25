@@ -80,5 +80,5 @@ llamaVisionModel = LLMAVisionModel(args)
 model, tokenizer = llamaVisionModel.load_model()
 composed = llamaVisionModel.createImageInput(output_path, resized_img, target_class)
 inputs = llamaVisionModel.compose_input(tokenizer, composed)
-llamaVisionModel.generate_response(inputs, tokenizer, model)
+llamaVisionModel.generate_response(inputs, tokenizer, model, output_path)
 

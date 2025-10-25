@@ -52,8 +52,23 @@ class LLMAVisionModel:
             return_tensors = "pt",
         ).to("cuda")
         return inputs
-    def generate_response(self, inputs, tokenizer, model):
-        text_streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
+    def generate_response(self, inputs, tokenizer, model, output_path):
+        output_path = f'{output_path}llama_response.txt'
+        text_streamer = FileTextStreamer(tokenizer, file_path=output_path)
         _ = model.generate(**inputs, streamer = text_streamer, max_new_tokens = 400,
                         use_cache = True, temperature = 1.5, min_p = 0.1)
         
+        
+        
+class FileTextStreamer(TextStreamer):
+    def __init__(self, tokenizer, file_path, **kwargs):
+        super().__init__(tokenizer, skip_prompt=True, skip_special_tokens=True, **kwargs)
+        self.file = open(file_path, "w", encoding="utf-8")
+
+    def on_finalized_text(self, text: str, stream_end: bool = False):
+        # Write the generated text chunk to file
+        self.file.write(text)
+        self.file.flush()  # ensure content is written immediately
+        if stream_end:
+            self.file.close()  # close file at end of generation
+
