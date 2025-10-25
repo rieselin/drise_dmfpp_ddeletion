@@ -1,0 +1,59 @@
+from PIL import Image
+
+from unsloth import FastVisionModel # FastLanguageModel for LLMs
+from transformers import TextStreamer
+
+class LLMAVisionModel:
+    def __init__(self, args):
+        self.args = args
+    def load_model(self):
+        model, tokenizer = FastVisionModel.from_pretrained(
+            "unsloth/Llama-3.2-11B-Vision-Instruct",
+            load_in_4bit = True, # Use 4bit to reduce memory use. False for 16bit LoRA.
+            use_gradient_checkpointing = "unsloth", # True or "unsloth" for long context
+        )
+        FastVisionModel.for_inference(model) # Enable for inference!
+        return model, tokenizer
+    def createImageInput(self, date_time, resized_img, target_class):
+        #yolo detected bboxes
+        yoloPredictedBboxes = Image.open(f'output/{self.args.img_name}_predicted_bboxes_{date_time}.png')
+
+        # saliency map with target bbox
+        driseSaliency = Image.open(f'output/{self.args.img_name}_saliency_targetbb_class{target_class}_{date_time}.png')
+
+
+        images = [resized_img, yoloPredictedBboxes, driseSaliency]
+        widths, heights = zip(*(i.size for i in images))
+
+        total_width = sum(widths)
+        max_height = max(heights)
+
+        composed = Image.new('RGB', (total_width, max_height))
+
+        x_offset = 0
+        for im in images:
+            composed.paste(im, (x_offset,0))
+            x_offset += im.size[0]
+
+        composed.save(f'output/composedImage{target_class}_{date_time}.jpg')
+        return composed
+    def compose_input(self, tokenizer, composed):
+        messages = [
+        {"role": "user", "content": [
+            {"type": "image"},
+            {"type": "text", "text": self.args.instruction}
+        ]}
+        ]
+        input_text = tokenizer.apply_chat_template(messages, add_generation_prompt = True)
+        inputs = tokenizer(
+            composed,
+            input_text,
+            add_special_tokens = False,
+            return_tensors = "pt",
+        ).to("cuda")
+        return inputs
+    def generate_response(self, inputs, tokenizer, model):
+        text_streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
+        _ = model.generate(**inputs, streamer = text_streamer, max_new_tokens = 400,
+                        use_cache = True, temperature = 1.5, min_p = 0.1)
+        
