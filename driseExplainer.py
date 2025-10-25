@@ -32,7 +32,7 @@ class DRISEExplainer:
             target_bbox=target_bbox
         )
         return saliency
-    def plot_saliency(self, saliency, target_bbox, img_np, output_path, target_class):
+    def plot_saliency(self, saliency, target_bbox, predicted_bbox, img_np, output_path, target_class):
         plot_saliency_and_targetbb_on_image(
             height=self.args.input_size[0], width=self.args.input_size[1], 
             img_name=self.args.img_name, 
@@ -40,6 +40,7 @@ class DRISEExplainer:
             saliency_map=saliency[target_class], 
             target_class_id= target_class,
             target_bbox=target_bbox,
+            predicted_box=predicted_bbox,
             show_plot = self.args.show_plots,
-            save_to=f'{output_path}drise_saliency.png'
+            save_to=f'{output_path}'
         )

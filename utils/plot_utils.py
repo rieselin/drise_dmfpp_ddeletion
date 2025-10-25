@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import torch
+import matplotlib.patches as mpatches
 
 def plot_saliency_map(img_name, saliency_map_path, show_plot=False):
     """
@@ -101,7 +102,7 @@ def plot_saliency_on_image(height, width, saliency_map, img, img_name='img_name'
     if show_plot:
         plt.show()
 
-def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, target_bbox=None, figsize=None, display_title=True, save_to=None,show_plot=False):
+def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, target_bbox=None, predicted_box=None, figsize=None, display_title=True, save_to=None,show_plot=False):
     """
     Plots the saliency map overlaid on the original image along with the target bounding box.
 
@@ -151,6 +152,20 @@ def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_na
         polygon = plt.Polygon(target_bbox, closed=True, edgecolor='r', linewidth=2, fill=False)
         # plt.gca().add_patch(polygon)
         ax.add_patch(polygon)
+    # plot predicted box if provided
+    if predicted_box is not None:
+        polygon = plt.Polygon(predicted_box, closed=True, edgecolor='blue', linewidth=2, fill=False)
+        ax.add_patch(polygon)
+    
+    legend_elements = []
+    if target_bbox is not None:
+        legend_elements.append(mpatches.Patch(edgecolor='r', facecolor='none', label='Given (Red)'))
+    if predicted_box is not None:
+        legend_elements.append(mpatches.Patch(edgecolor='blue', facecolor='none', label='Predicted (Blue)'))
+
+    if legend_elements:
+        ax.legend(handles=legend_elements, loc='lower right', frameon=True, fontsize=8)
+
         
     plt.colorbar(saliency_plot, ax=ax, fraction=0.046, pad=0.04, shrink=0.65)
     

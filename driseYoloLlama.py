@@ -5,8 +5,10 @@ import os
 from dataProcessing import DataProcessing
 from driseExplainer import DRISEExplainer
 from llamaVisionModel import LLMAVisionModel
+from metrics.utils import calculate_iou
 from yoloModel import YoloModel
 from datetime import datetime
+from utils.compute_iou import compute_iou
 
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -57,7 +59,6 @@ tensor = dataProcessing.preprocess_image(img_np)
 labels = dataProcessing.load_labels()
 target_class = dataProcessing.set_target_class()
 bboxes = dataProcessing.plot_bboxes(img_np, labels, target_class)
-target_bbox = dataProcessing.plot_target_bbox(img_np, bboxes, target_class)
 
 
 # ## YOLO
@@ -65,14 +66,44 @@ yoloModel = YoloModel(args)
 results = yoloModel.predict(tensor)
 predicted_bboxes = yoloModel.extract_bboxes(results)
 image_with_bboxes = yoloModel.plot_bboxes(img_np, predicted_bboxes, output_path)
-image_with_target_bbox = yoloModel.plot_target_bbox(img_np, predicted_bboxes[0], output_path)
 
 
 # ## D-RISE
 driseExplainer = DRISEExplainer(args, yoloModel, generate_new=True)
 mask_path = driseExplainer.generate_masks()
-saliency = driseExplainer.apply_saliency(tensor, target_bbox)
-driseExplainer.plot_saliency(saliency, target_bbox, img_np, output_path, target_class)
+
+output_path_saliency = f'{output_path}saliency/'
+os.makedirs(output_path_saliency, exist_ok=True)
+
+# todo : think about more sensible way to label instead of just increasing i
+# todo : do something if no match found
+# todo : llama input change
+# todo make run for multiple target classes and muttiple images
+i = 0
+for bbox in bboxes:
+    # find the predicted bbox (in predicted_bboxes) that matches the bbox given in the labels
+    # Find the predicted bbox that best matches the ground-truth bbox
+    best_iou = 0
+    best_pred_bbox = None
+
+    for pred_bbox in predicted_bboxes:
+        iou = calculate_iou(bbox, pred_bbox)
+        if iou > best_iou:
+            best_iou = iou
+            best_pred_bbox = pred_bbox
+
+    # Optionally set a threshold to ensure it's a valid match
+    if best_iou < 0.3:
+        print(f"No good match found for bbox {bbox} (best IoU: {best_iou:.2f})")
+        continue
+
+    
+    saliency = driseExplainer.apply_saliency(tensor, bbox)
+    # plot salicney map with both target bbox and predicted bbox
+    
+
+    driseExplainer.plot_saliency(saliency, bbox, best_pred_bbox, img_np, f'{output_path_saliency}drise_saliency_{i}.png', target_class)
+    i += 1
 
 
 # ## LLAMA VL
