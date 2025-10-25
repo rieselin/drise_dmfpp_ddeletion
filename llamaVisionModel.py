@@ -14,12 +14,12 @@ class LLMAVisionModel:
         )
         FastVisionModel.for_inference(model) # Enable for inference!
         return model, tokenizer
-    def createImageInput(self, date_time, resized_img, target_class):
+    def createImageInput(self, output_path, resized_img, target_class):
         #yolo detected bboxes
-        yoloPredictedBboxes = Image.open(f'output/{self.args.img_name}_predicted_bboxes_{date_time}.png')
+        yoloPredictedBboxes = Image.open(f'{output_path}yolo_predicted_bboxes.png')
 
         # saliency map with target bbox
-        driseSaliency = Image.open(f'output/{self.args.img_name}_saliency_targetbb_class{target_class}_{date_time}.png')
+        driseSaliency = Image.open(f'{output_path}drise_saliency.png')
 
 
         images = [resized_img, yoloPredictedBboxes, driseSaliency]
@@ -35,7 +35,7 @@ class LLMAVisionModel:
             composed.paste(im, (x_offset,0))
             x_offset += im.size[0]
 
-        composed.save(f'output/composedImage{target_class}_{date_time}.jpg')
+        composed.save(f'{output_path}composed_image.jpg')
         return composed
     def compose_input(self, tokenizer, composed):
         messages = [

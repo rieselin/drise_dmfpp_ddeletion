@@ -1,6 +1,5 @@
 
 import os
-import torch
 from utils.plot_utils import plot_saliency_and_targetbb_on_image
 from xai.drise_batch import DRISEBatch
 
@@ -33,7 +32,7 @@ class DRISEExplainer:
             target_bbox=target_bbox
         )
         return saliency
-    def plot_saliency(self, saliency, target_bbox, img_np, date_time, target_class):
+    def plot_saliency(self, saliency, target_bbox, img_np, output_path, target_class):
         plot_saliency_and_targetbb_on_image(
             height=self.args.input_size[0], width=self.args.input_size[1], 
             img_name=self.args.img_name, 
@@ -42,5 +41,5 @@ class DRISEExplainer:
             target_class_id= target_class,
             target_bbox=target_bbox,
             show_plot = self.args.show_plots,
-            save_to=f'output/{self.args.img_name}_saliency_targetbb_class{target_class}_{date_time}.png'
+            save_to=f'{output_path}drise_saliency.png'
         )

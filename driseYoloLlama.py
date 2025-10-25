@@ -1,5 +1,6 @@
 
 import ssl
+import os
 
 from dataProcessing import DataProcessing
 from driseExplainer import DRISEExplainer
@@ -29,6 +30,7 @@ args = Args(**{
     'p1': 0.5,
     'target_classes': [0],
     'show_plots': False,
+    'run_id_tag': '',
     'instruction': """You are the Visual LLM specializing in detailed explanation chaining for Visual-LLMs.
 You are provided with an image, the bounding box predicted by YOLO and a saliency map for one bounding box generated with DRISE.
 Give a detailed analysis on Color, Shape and Result to explain how the model reached the bounding box.
@@ -40,10 +42,16 @@ Do not explain any of the used models or concepts. Only focus on the given image
 """
 })
 
-# ## Data Processing
-date_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+# setup
+date_time_tag = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+if args.run_id_tag != '':
+    date_time_tag += f'_{args.run_id_tag}'
+output_path = f'output/{date_time_tag}/{args.img_name}/'
+os.makedirs(output_path, exist_ok=True)
 
-dataProcessing = DataProcessing(args, date_time)
+
+# ## Data Processing
+dataProcessing = DataProcessing(args, output_path)
 resized_img, img_np = dataProcessing.import_data()
 tensor = dataProcessing.preprocess_image(img_np)
 labels = dataProcessing.load_labels()
@@ -53,24 +61,24 @@ target_bbox = dataProcessing.plot_target_bbox(img_np, bboxes, target_class)
 
 
 # ## YOLO
-# Load model and test to see its predictions
 yoloModel = YoloModel(args)
 results = yoloModel.predict(tensor)
 predicted_bboxes = yoloModel.extract_bboxes(results)
-image_with_bboxes = yoloModel.plot_bboxes(img_np, predicted_bboxes, date_time=date_time)
+image_with_bboxes = yoloModel.plot_bboxes(img_np, predicted_bboxes, output_path)
+image_with_target_bbox = yoloModel.plot_target_bbox(img_np, predicted_bboxes[0], output_path)
 
 
 # ## D-RISE
 driseExplainer = DRISEExplainer(args, yoloModel, generate_new=True)
 mask_path = driseExplainer.generate_masks()
 saliency = driseExplainer.apply_saliency(tensor, target_bbox)
-driseExplainer.plot_saliency(saliency, target_bbox, img_np, date_time, target_class)
+driseExplainer.plot_saliency(saliency, target_bbox, img_np, output_path, target_class)
 
 
 # ## LLAMA VL
 llamaVisionModel = LLMAVisionModel(args)
 model, tokenizer = llamaVisionModel.load_model()
-composed = llamaVisionModel.createImageInput(date_time, resized_img, target_class)
+composed = llamaVisionModel.createImageInput(output_path, resized_img, target_class)
 inputs = llamaVisionModel.compose_input(tokenizer, composed)
 llamaVisionModel.generate_response(inputs, tokenizer, model)
 

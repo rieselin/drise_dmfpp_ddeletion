@@ -6,9 +6,9 @@ from utils.plot_utils import plot_image_with_bboxes
 
 
 class DataProcessing:
-    def __init__(self, args, date_time):
+    def __init__(self, args, output_path):
         self.args = args
-        self.date_time = date_time
+        self.output_path = output_path
     def import_data(self):
         height, width = self.args.input_size
         img_path = self.args.datadir + self.args.img_name
@@ -35,11 +35,11 @@ class DataProcessing:
         return target_class
     def plot_bboxes(self, img_np, labels, target_class):
         bboxes, _ = load_and_convert_bboxes(labels,img_height=self.args.input_size[0],img_width=self.args.input_size[1], target_class= target_class)
-        plot_image_with_bboxes(img_np,bboxes, save_to=f'output/{self.args.img_name}_bboxes_class{target_class}_{self.date_time}.png', show_plot=self.args.show_plots)
+        plot_image_with_bboxes(img_np,bboxes, save_to=f'{self.output_path}bboxes.png', show_plot=self.args.show_plots)
         return bboxes
     def plot_target_bbox(self, img_np, bboxes, target_class):
         target_bbox = bboxes[0] # select the first bbox --> multiple might be given in the same image
-        plot_image_with_bboxes(img_np,[target_bbox], save_to=f'output/{self.args.img_name}_target_bbox_class{target_class}_{self.date_time}.png', show_plot=self.args.show_plots)
+        plot_image_with_bboxes(img_np,[target_bbox], save_to=f'{self.output_path}target_bbox.png', show_plot=self.args.show_plots)
         print('Target bbox:',target_bbox)
         return target_bbox
     

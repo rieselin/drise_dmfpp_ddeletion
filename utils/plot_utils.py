@@ -31,32 +31,36 @@ def plot_image_with_bboxes(img_np, bboxes, title=None, save_to=None, show_plot=F
     - img_np: NumPy array representing the image.
     - bboxes: List of bounding boxes, each represented by a list of vertices in pixel coordinates.
     """
+    img_np = img_np.copy() # To avoid modifying the original image
+    
     if isinstance(img_np, torch.Tensor):
         # Move to CPU, convert to NumPy and transpose from (C, H, W) to (H, W, C)
         img_np = img_np.cpu().numpy().transpose((1, 2, 0))
+        
+    fig, ax = plt.subplots()
 
     # Display the image
-    plt.imshow(img_np)
+    ax.imshow(img_np)
+    ax.axis('off')
     
     # Iterate over each bounding box
     for bbox in bboxes:
         # Create a polygon from the bounding box vertices
         polygon = plt.Polygon(bbox, closed=True, edgecolor='r', linewidth=2,fill=None)
         # Add the polygon to the plot
-        plt.gca().add_patch(polygon)
+        ax.add_patch(polygon)
     
     # Set the title of the plot
     if title is not None:
-        plt.title(title)
+        ax.set_title(title)
     else:
-        plt.title("Image with Bounding Boxes")
-    # Remove the axes for a cleaner look
-    plt.axis('off')
+        ax.set_title("Image with Bounding Boxes")
     if save_to is not None:
-        plt.savefig(fname=save_to)
+        fig.savefig(fname=save_to)
     # Display the plot
     if show_plot:
         plt.show()
+    plt.close(fig)  # Close the figure to free up memory
 
 def plot_saliency_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, show_plot=False):
     """
@@ -69,6 +73,8 @@ def plot_saliency_on_image(height, width, saliency_map, img, img_name='img_name'
     - saliency_map_path: Path to the saliency map npy file.
     - target_class_id: ID of the class we are interested to plot the saliency maps for.
     """
+    img = img.copy() # To avoid modifying the original image
+    
     # Load the saliency map
     if not isinstance(saliency_map, np.ndarray):
         saliency = np.load(saliency_map)
@@ -107,6 +113,8 @@ def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_na
     - target_class_id: ID of the class we are interested to plot the saliency maps for.
     - target_bbox: List of tuples representing the normalized vertices of the bounding box.
     """
+    
+    img = img.copy() # To avoid modifying the original image
 
     # Load the saliency map
     if not isinstance(saliency_map, np.ndarray):
