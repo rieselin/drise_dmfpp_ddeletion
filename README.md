@@ -1,3 +1,14 @@
+# Setup: 
+1. clone repo
+2. create virtual env inside repo folder: python -m venv ./.venv
+3. activate environment
+4. run poetry install
+5. run file (adapt arguments if needed)
+   
+
+
+
+
 # On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications
 
 This repository is the official implementation of [On the Black-box Explainability of Object Detection Models for Safe and Trustworthy Industrial Applications](https://www.sciencedirect.com/science/article/pii/S259012302401750X), where algorithms like D-RISE and D-MFPP specifically designed for Object Detection models can be found.
