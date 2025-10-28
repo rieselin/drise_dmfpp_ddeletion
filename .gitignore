@@ -165,3 +165,8 @@ cython_debug/
 output/*
 masks/*
 unsloth_compiled_cache/*
+coco_data/*
+
+!coco_data/README.md
+!output/README.md
+!masks/README.md
