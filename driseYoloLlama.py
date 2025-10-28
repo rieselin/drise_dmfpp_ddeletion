@@ -3,6 +3,7 @@ import ssl
 import os
 import json
 
+from cocoDataSet import CocoDataSet
 from dataProcessing import DataProcessing
 from driseExplainer import DRISEExplainer
 from llamaVisionModel import LLMAVisionModel
@@ -20,10 +21,10 @@ class Args:
         self.__dict__.update(entries)
         
 args = Args(**{
-    'img_names': ['00901'],
+    'img_names': ['000000000419', '000000000260', '000000000328', '000000000149', '000000000722', '000000000730'],
     'model_path': 'use_case/models/best.pt',
-    'datadir': 'use_case/',
-    'annotations_dir': 'use_case/',
+    'datadir': 'coco_data/coco-2017/train/data/',
+    'annotations_dir': 'coco_data/coco-2017/train/data/',
     'device': 'cuda:0',
     'input_size': (480, 640),
     'gpu_batch': 16,
@@ -32,17 +33,9 @@ args = Args(**{
     'N': 1000,
     'resolution': 8,
     'p1': 0.5,
-    'target_classes': [0, 1],
+    'target_classes': [1],
     'show_plots': False,
     'run_id_tag': '',
-#    """ You are the Visual LLM specializing in detailed explanation chaining for Visual-LLMs.
-# You are provided with an image, the bounding box predicted by YOLO and a saliency map for one bounding box generated with DRISE.
-# Give a detailed analysis on Color, Shape and Result to explain how the model reached the bounding box.
-
-# Do not make up any information that is not present in the image, bounding boxes or saliency map.
-# Do not repeat the same information in different sections.
-# Do not explain any of the used models or concepts. Only focus on the given image, bounding boxes and saliency map."""
-
     'instruction': '',
     'run_only_first_bbox': False,
 # send to llama configs
@@ -52,12 +45,26 @@ args = Args(**{
     
 })
 
+
+cocoDataSet = CocoDataSet(
+    dataset_name="coco-2017", 
+    split="train", 
+    classes=["person", "car"], 
+    max_samples=10, 
+    dataset_dir='coco_data/')
+cocoDataSet.load_dataset()
+
+cocoDataSet.save_bboxes_to_file()
+
+# overwrite args.input_size based on dataset images
+
+date_time_tag = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+if args.run_id_tag != '':
+        date_time_tag += f'_{args.run_id_tag}'
+
 for args.img_name in args.img_names:
 
     # setup
-    date_time_tag = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    if args.run_id_tag != '':
-        date_time_tag += f'_{args.run_id_tag}'
     output_path = f'output/{date_time_tag}/{args.img_name}/'
     os.makedirs(output_path, exist_ok=True)
 
