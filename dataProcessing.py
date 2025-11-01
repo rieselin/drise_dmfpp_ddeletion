@@ -12,7 +12,10 @@ class DataProcessing:
     def import_data(self):
         height, width = self.args.input_size
         img_path = self.args.datadir + self.args.img_name
-        orig_img = Image.open(img_path + '.jpg')
+        if self.args.datadir.startswith('kitti'):
+            orig_img = Image.open(img_path + '.png')
+        else: 
+            orig_img = Image.open(img_path + '.jpg')
         resized_img = orig_img.resize((width, height), Image.LANCZOS)
         img_np = np.array(resized_img)
         return resized_img, img_np

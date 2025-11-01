@@ -166,7 +166,9 @@ output/*
 masks/*
 unsloth_compiled_cache/*
 coco_data/*
+kitti_data/*
 
 !coco_data/README.md
 !output/README.md
 !masks/README.md
+!kitti_data/README.md

@@ -6,6 +6,7 @@ import json
 from cocoDataSet import CocoDataSet
 from dataProcessing import DataProcessing
 from driseExplainer import DRISEExplainer
+from kittiDataSet import KittiDataSet
 from llamaVisionModel import LLMAVisionModel
 from metrics.utils import calculate_iou
 from utils.plot_utils import plot_image_with_bboxes
@@ -21,14 +22,15 @@ class Args:
         self.__dict__.update(entries)
         
 args = Args(**{
-    'img_names': ['000000000419', '000000000260', '000000000328', '000000000149', '000000000722', '000000000730'],
-    'model_path': 'use_case/models/best.pt',
-    'datadir': 'coco_data/coco-2017/train/data/',
-    'annotations_dir': 'coco_data/coco-2017/train/data/',
+    'img_names': ['000000', '000001'],#['000000000419', '000000000260', '000000000328', '000000000149', '000000000722', '000000000730'],
+    #'model_path': 'use_case/models/best.pt',
+    'model_path': 'yolov8n.pt',
+    'datadir': 'kitti_data/kitti/train/data/', #'coco_data/coco-2017/train/data/',
+    'annotations_dir': 'kitti_data/kitti/train/annotations/', #'coco_data/coco-2017/train/data/',
     'device': 'cuda:0',
     'input_size': (480, 640),
     'gpu_batch': 16,
-    'mask_type': 'rise',
+    'mask_type': 'mfpp', # mfpp or rise
     'maskdir': 'masks/',
     'N': 1000,
     'resolution': 8,
@@ -46,13 +48,21 @@ args = Args(**{
 })
 
 
+kittiDataSet = KittiDataSet(
+    dataset_name="kitti", 
+    split="train", 
+   # classes=["Car", "Pedestrian"], 
+    max_samples=10, 
+    dataset_dir='kitti_data/')
+kittiDataSet.save_bboxes_to_file()
+
+
 cocoDataSet = CocoDataSet(
     dataset_name="coco-2017", 
     split="train", 
     classes=["person", "car"], 
     max_samples=10, 
     dataset_dir='coco_data/')
-cocoDataSet.load_dataset()
 
 cocoDataSet.save_bboxes_to_file()
 
