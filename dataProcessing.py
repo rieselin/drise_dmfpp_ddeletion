@@ -33,11 +33,8 @@ class DataProcessing:
     def load_labels(self):
         labels = self.args.annotations_dir + self.args.img_name + '.txt'
         return labels
-    def set_target_class(self):
-        target_class = self.args.target_classes[0] # select a single class (list is given)
-        return target_class
     def plot_bboxes(self, img_np, labels, target_class):
         bboxes, _ = load_and_convert_bboxes(labels,img_height=self.args.input_size[0],img_width=self.args.input_size[1], target_class= target_class)
-        plot_image_with_bboxes(img_np,bboxes, save_to=f'{self.output_path}bboxes.png', show_plot=self.args.show_plots)
+        plot_image_with_bboxes(img_np,bboxes, save_to=f'{self.output_path}bboxes_tc_{target_class}.png', show_plot=self.args.show_plots)
         return bboxes
     

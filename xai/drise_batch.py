@@ -79,6 +79,7 @@ class DRISEBatch(RISE):
 
                     # Calculate IoU
                     iou_score = self.calculate_iou(polygon1=target_bbox, polygon2=vertices)
+                    print(f"Calculated IoU: {iou_score} for target bbox {target_bbox} and predicted bbox {vertices}")
                     
                     if iou_score > 0:  # Only consider overlaps
                         points = iou_score * score
