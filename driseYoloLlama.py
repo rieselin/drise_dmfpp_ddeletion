@@ -22,10 +22,10 @@ class Args:
         self.__dict__.update(entries)
         
 args = Args(**{
-    'img_names': ['000001'],#['00901'], #[ '000001'],#['000000000419', '000000000260', '000000000328', '000000000149', '000000000722', '000000000730'],
+    'img_names':['00901'],# ['000001'], #[ '000001'],#['000000000419', '000000000260', '000000000328', '000000000149', '000000000722', '000000000730'],
     'model_path': 'yolov8n.pt',#'use_case/models/best.pt',#
-    'datadir': 'kitti_data/kitti/train/data/',#'use_case/',#'kitti_data/kitti/train/data/', #'coco_data/coco-2017/train/data/',
-    'annotations_dir': 'kitti_data/kitti/train/annotations/',#'use_case/',#'kitti_data/kitti/train/annotations/', #'coco_data/coco-2017/train/data/',
+    'datadir': 'use_case/',#'kitti_data/kitti/train/data/',#,#'kitti_data/kitti/train/data/', #'coco_data/coco-2017/train/data/',
+    'annotations_dir': 'use_case/',#'kitti_data/kitti/train/annotations/',#'use_case/',#'kitti_data/kitti/train/annotations/', #'coco_data/coco-2017/train/data/',
     'device': 'cuda:0',
     'input_size': (480, 640),
     'gpu_batch': 16,
@@ -34,7 +34,7 @@ args = Args(**{
     'N': 1000,
     'resolution': 8,
     'p1': 0.5,
-    'target_classes': [5],
+    'target_classes': [2],
     'show_plots': False,
     'run_id_tag': '',
     'instruction': '',
@@ -44,6 +44,7 @@ args = Args(**{
     'send_labelled_bbox': False,
     'send_predicted_bbox': True, 
     'send_all_bboxes_of_image_at_once': True,
+    'remove_all_borders_and_legends_from_images': True,
     
 })
 
@@ -147,13 +148,13 @@ for args.img_name in args.img_names:
                 if not args.send_saliency_map and not args.send_labelled_bbox and not args.send_predicted_bbox:
                     composed = resized_img
                 elif not args.send_saliency_map and args.send_labelled_bbox and not args.send_predicted_bbox:
-                    composed = plot_image_with_bboxes(img_np, [bbox], show_plot=args.show_plots, save_to=f'{output_path_saliency}bbox_{i}.png')
+                    composed = plot_image_with_bboxes(img_np, [bbox], show_plot=args.show_plots, save_to=f'{output_path_saliency}bbox_{i}.png', tight_save=args.remove_all_borders_and_legends_from_images)
                     composed = Image.open( f'{output_path_saliency}bbox_{i}.png')
                 elif not args.send_saliency_map and not args.send_labelled_bbox and args.send_predicted_bbox:
-                    composed = plot_image_with_bboxes(img_np, [best_pred_bbox], show_plot=args.show_plots, save_to=f'{output_path_saliency}bbox_{i}.png')
+                    composed = plot_image_with_bboxes(img_np, [best_pred_bbox], show_plot=args.show_plots, save_to=f'{output_path_saliency}bbox_{i}.png', tight_save=args.remove_all_borders_and_legends_from_images)
                     composed = Image.open( f'{output_path_saliency}bbox_{i}.png')
                 elif not args.send_saliency_map and args.send_labelled_bbox and args.send_predicted_bbox:
-                    composed = plot_image_with_bboxes(img_np, [bbox, best_pred_bbox], show_plot=args.show_plots, save_to=f'{output_path_saliency}bbox_{i}.png')
+                    composed = plot_image_with_bboxes(img_np, [bbox, best_pred_bbox], show_plot=args.show_plots, save_to=f'{output_path_saliency}bbox_{i}.png', tight_save=args.remove_all_borders_and_legends_from_images)
                     composed = Image.open( f'{output_path_saliency}bbox_{i}.png')
                 # send saliency map
                 elif args.send_saliency_map and not args.send_labelled_bbox and not args.send_predicted_bbox:

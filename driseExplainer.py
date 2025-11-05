@@ -42,5 +42,6 @@ class DRISEExplainer:
             target_bbox=target_bbox,
             predicted_box=predicted_bbox,
             show_plot = self.args.show_plots,
-            save_to=f'{output_path}'
+            save_to=f'{output_path}',
+            tight_save=self.args.remove_all_borders_and_legends_from_images
         )

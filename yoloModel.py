@@ -19,5 +19,5 @@ class YoloModel:
             predicted_bboxes.append(bbox)
         return predicted_bboxes
     def plot_bboxes(self, img_np, predicted_bboxes, output_path):
-        image_with_bboxes = plot_image_with_bboxes(img_np, predicted_bboxes, save_to=f'{output_path}yolo_predicted_bboxes.png', show_plot=self.args.show_plots)
+        image_with_bboxes = plot_image_with_bboxes(img_np, predicted_bboxes, save_to=f'{output_path}yolo_predicted_bboxes.png', show_plot=self.args.show_plots, tight_save=self.args.remove_all_borders_and_legends_from_images)
         return image_with_bboxes

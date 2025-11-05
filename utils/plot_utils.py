@@ -24,7 +24,7 @@ def plot_saliency_map(img_name, saliency_map_path, show_plot=False):
         plt.show()
 
 
-def plot_image_with_bboxes(img_np, bboxes, title=None, save_to=None, show_plot=False):
+def plot_image_with_bboxes(img_np, bboxes, title=None, save_to=None, show_plot=False, tight_save=True):
     """
     Plots an image with bounding boxes.
 
@@ -52,12 +52,17 @@ def plot_image_with_bboxes(img_np, bboxes, title=None, save_to=None, show_plot=F
         ax.add_patch(polygon)
     
     # Set the title of the plot
-    if title is not None:
+    if (title is not None):
         ax.set_title(title)
     else:
-        ax.set_title("Image with Bounding Boxes")
+        if (not tight_save):
+            ax.set_title("Image with Bounding Boxes")
     if save_to is not None:
-        fig.savefig(fname=save_to)
+        if tight_save:
+            # pad_inches=0 and bbox_inches='tight' help remove any remaining whitespace
+            fig.savefig(save_to, bbox_inches='tight', pad_inches=0)
+        else:
+            fig.savefig(save_to)
     # Display the plot
     if show_plot:
         plt.show()
@@ -102,7 +107,7 @@ def plot_saliency_on_image(height, width, saliency_map, img, img_name='img_name'
     if show_plot:
         plt.show()
 
-def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, target_bbox=None, predicted_box=None, figsize=None, display_title=True, save_to=None,show_plot=False):
+def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_name='img_name', target_class_id=0, target_bbox=None, predicted_box=None, figsize=None, display_title=True, save_to=None,show_plot=False, tight_save=True):
     """
     Plots the saliency map overlaid on the original image along with the target bounding box.
 
@@ -135,7 +140,7 @@ def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_na
     # Plotting
     fig, ax = plt.subplots(figsize=figsize if figsize is not None else (5, 5))
     
-    if display_title:
+    if display_title and (not tight_save):
         plt.title(f'Saliency Map for {img_name} and target class id:{target_class_id}')
     # 1. Display the original image
     # plt.imshow(img_np)
@@ -163,14 +168,25 @@ def plot_saliency_and_targetbb_on_image(height, width, saliency_map, img, img_na
     if predicted_box is not None:
         legend_elements.append(mpatches.Patch(edgecolor='blue', facecolor='none', label='Predicted (Blue)'))
 
-    if legend_elements:
+    if legend_elements and not tight_save:
         ax.legend(handles=legend_elements, loc='lower right', frameon=True, fontsize=8)
 
         
-    plt.colorbar(saliency_plot, ax=ax, fraction=0.046, pad=0.04, shrink=0.65)
+    cb = plt.colorbar(saliency_plot, ax=ax, fraction=0.046, pad=0.04, shrink=0.65)
+    if tight_save:
+        cb.remove()  # Remove colorbar for tight save to minimize whitespace
     
     if save_to is not None:
-        plt.savefig(fname=save_to)
-    plt.tight_layout()
+        if tight_save:
+            # bbox_inches='tight' + pad_inches=0 removes outer whitespace while keeping
+            # colorbar and legend in the saved image.
+            fig.savefig(save_to, bbox_inches='tight', pad_inches=0)
+        else:
+            fig.savefig(save_to)
+
+    # Final layout and show/close
+    if not tight_save:
+        plt.tight_layout()
     if show_plot:
         plt.show()
+    plt.close(fig)
