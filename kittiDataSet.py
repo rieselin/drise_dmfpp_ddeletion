@@ -70,16 +70,26 @@ class KittiDataSet:
 
 # Define mapping from class name to numeric ID
 class_map = {
-    "DontCare": 0,
+    "Car": 0,
     "Pedestrian": 1,
-    "Car": 2,
-    "Cyclist": 3,
-    "Van": 4,
-    "Truck": 5,
-    "Misc": 6,
-    "Person_sitting": 7,
-    "Tram": 8,
+    "Cyclist": 2,
+    "Truck": 3,
+    "Van": 4
 }
+
+class_map_rev = {v: k for k, v in class_map.items()}
+
+
+
+    # "DontCare": 0,
+    # "Pedestrian": 1,
+    # "Car": 2,
+    # "Cyclist": 3,
+    # "Van": 4,
+    # "Truck": 5,
+    # "Misc": 6,
+    # "Person_sitting": 7,
+    # "Tram": 8,
 
 # # Load COCO annotations
 # with open("labels.json", "r") as f:
